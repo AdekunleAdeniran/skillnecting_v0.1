@@ -1,24 +1,24 @@
 #!/usr/bin/python3
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wftforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms.validators import DataRequired, Length, Email, EqualTo
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    class RegistrationForm(FlaskForm):
-        """ Class for registration form"""
-        username = StringField('Username', validators=[DataRequired(),
-                                                       Length(min=2, max=20)])
-        email = StringField('Email', validators=[DataRequired(), Email()])
-        password = PasswordField('Password', validators=[DataRequired()])
-        confirm_password = PasswordField('Confirm Password',
-                                         validators=[DataRequired(),
-                                                     EqualTo('password')])
-        submit = SubmitField('Sign Up')
+class RegistrationForm(FlaskForm):
+    """ Class for registration form"""
+    username = StringField('Username', validators=[DataRequired(),
+                                                   Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[DataRequired(),
+                                                 EqualTo('password')])
+    submit = SubmitField('Sign Up')
 
-    class LoginForm(FlaskForm):
-        """ Class for registration form"""
-        email = StringField('Email', validators=[DataRequired(), Email()])
-        password = PasswordField('Password', validators=[DataRequired()])
-        remember = BooleanField('Remember Me')
-        submit = SubmitField('Login')
+class LoginForm(FlaskForm):
+    """ Class for registration form"""
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
