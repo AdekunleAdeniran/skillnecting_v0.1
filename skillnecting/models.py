@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 from datetime import datetime
+from flask import current_app
+from itsdangerous import TimedJSONWebSignatureSerializer as TJS
 from skillnecting import db, login_manager
 from flask_login import UserMixin
 
@@ -19,6 +21,23 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
     github_username = db.Column(db.String(30), unique=True, nullable=False)
+
+    
+    def get_reset_token(self, expires_sec=1800):
+        """Function to generate timed token for password reset"""
+        s = TJS(current_app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        """FUnction to verify token"""
+        s = TJS(current_app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+
 
     def __repr__(self):
         return "User '{}', '{}', '{}', '{}' ".format(
