@@ -61,8 +61,9 @@ def login():
 @users.route("/logout")
 def logout():
     """Function to logout users"""
+    print(request.referrer)
     logout_user()
-    return redirect(url_for('main.home'))
+    return redirect(request.referrer)
 
 
 @users.route("/account", methods=['GET', 'POST'])
@@ -93,6 +94,16 @@ def user_posts(username):
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     return render_template("user_post.html", posts=posts, user=user)
+
+
+@users.route("/home/<string:username>")
+@users.route("/<string:username>")
+def user_profile(username):
+    """Funtion to return User profile"""
+    user = User.query.filter_by(username=username).first_or_404()
+    print(user)
+    return render_template("user_profile.html", user=user)
+
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
